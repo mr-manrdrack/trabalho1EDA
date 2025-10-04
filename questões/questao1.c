@@ -114,19 +114,73 @@ void removerElemento(tListaDupla **inicio, int valor) {
     printf("Numero %d removido com sucesso.\n", valor);
 }
 
+// Função para pesquisar um elemento na lista
+void pesquisarElemento(tListaDupla *inicio, int valor) {
+    if (estaVazia(inicio)) {
+        printf("A lista esta vazia.\n");
+        return;
+    }
 
-void pesquisarElemento() {
+    tListaDupla *atual = inicio;
+    while (atual != NULL) {
+        if (atual->dado == valor) {
+            printf("Numero %d encontrado na lista.\n", valor);
+            return;
+        }
+        atual = atual->proximo;
+    }
+    printf("Numero %d nao encontrado na lista.\n", valor);
 }
 
+// Exibir lista em ordem crescente
+void exibirCrescente(tListaDupla *inicio) {
+    if (estaVazia(inicio)) {
+        printf("A lista esta vazia.\n");
+        return;
+    }
 
-void exibirCrescente() {
+    printf("Lista em ordem crescente: ");
+    tListaDupla *atual = inicio;
+    while (atual != NULL) {
+        printf("%d ", atual->dado);
+        atual = atual->proximo;
+    }
+    printf("\n");
 }
 
+// Exibir lista em ordem decrescente
+void exibirDecrescente(tListaDupla *inicio) {
+    if (estaVazia(inicio)) {
+        printf("A lista esta vazia.\n");
+        return;
+    }
 
-void exibirDecrescente() {
+    // Ir até o último nó
+    tListaDupla *atual = inicio;
+    while (atual->proximo != NULL) {
+        atual = atual->proximo;
+    }
+
+    printf("Lista em ordem decrescente: ");
+    while (atual != NULL) {
+        printf("%d ", atual->dado);
+        atual = atual->anterior;
+    }
+    printf("\n");
 }
 
-void destruirLista() {
+// Função para destruir a lista e liberar memória
+void destruirLista(tListaDupla **inicio) {
+    int contador = 0;
+    tListaDupla *atual = *inicio;
+    while (atual != NULL) {
+        tListaDupla *temp = atual;
+        atual = atual->proximo;
+        free(temp);
+        contador++;
+    }
+    *inicio = NULL;
+    printf("Lista destruida. %d nos foram liberados.\n", contador);
 }
 
 // Função para exibir o menu de opções
@@ -174,12 +228,18 @@ int main() {
             removerElemento(&lista, valor);
             break;
         case 5:
+            printf("Digite o numero a ser pesquisado: ");
+            scanf("%d", &valor);
+            pesquisarElemento(lista, valor);
             break;
         case 6:
+            exibirCrescente(lista);
             break;
         case 7:
+            exibirDecrescente(lista);
             break;
         case 8:
+            destruirLista(&lista);
             printf("Programa finalizado.\n");
             break;
         default:
